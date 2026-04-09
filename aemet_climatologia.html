@@ -11,12 +11,11 @@
     h1 { font-size: 20px; font-weight: 600; margin-bottom: 0.25rem; }
     .subtitle { font-size: 13px; color: #666; margin-bottom: 2rem; }
 
-    /* Formulario */
     .form-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem; }
-    .form-card h2 { font-size: 14px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 1rem; }
+    .form-card h2 { font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
     .form-group { display: flex; flex-direction: column; gap: 5px; }
-    .form-group.full { grid-column: 1 / -1; }
+    .form-group.full  { grid-column: 1 / -1; }
     .form-group.span2 { grid-column: span 2; }
     label { font-size: 12px; font-weight: 500; color: #555; }
     input, select {
@@ -27,11 +26,12 @@
       transition: border-color 0.15s;
     }
     input:focus, select:focus { outline: none; border-color: #555; }
+    select:disabled { background: #f7f7f5; color: #aaa; }
     .hint { font-size: 11px; color: #999; }
     .api-row { display: flex; gap: 8px; }
     .api-row input { flex: 1; }
+    .sep { border: none; border-top: 1px solid #f0f0ee; margin: 1.25rem 0; }
 
-    /* Botones */
     .btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 1rem; }
     .btn {
       height: 38px; padding: 0 20px;
@@ -39,24 +39,28 @@
       background: #fff; color: #1a1a1a;
       font-size: 14px; font-family: inherit;
       cursor: pointer; white-space: nowrap;
-      transition: background 0.12s, border-color 0.12s;
+      transition: background 0.12s;
     }
     .btn:hover { background: #f0f0ee; }
     .btn:active { transform: scale(0.98); }
     .btn-primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
     .btn-primary:hover { background: #333; }
     .btn-sm { height: 30px; font-size: 12px; padding: 0 12px; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-    /* Estado y progreso */
     .status { font-size: 13px; padding: 10px 14px; border-radius: 7px; margin: 1rem 0; display: none; }
     .status.info    { background: #e8f0fe; color: #1a56db; display: block; }
     .status.error   { background: #fde8e8; color: #c81e1e; display: block; }
     .status.success { background: #e3f5ec; color: #0f6e56; display: block; }
+    .status.warn    { background: #fef3e2; color: #92400e; display: block; }
     .progress-bar { height: 4px; background: #e0e0e0; border-radius: 2px; margin: 4px 0 0; overflow: hidden; display: none; }
     .progress-bar.on { display: block; }
     .progress-fill { height: 100%; background: #1a56db; border-radius: 2px; transition: width 0.3s; }
 
-    /* Resultados */
+    .station-info { font-size: 12px; color: #555; background: #f7f7f5; border-radius: 6px; padding: 8px 12px; margin-top: 8px; display: none; }
+    .station-info span { margin-right: 16px; }
+    .station-info strong { color: #1a1a1a; }
+
     .results { display: none; }
     .summary-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.5rem; }
     .card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 14px 16px; }
@@ -65,7 +69,6 @@
     .card-unit { font-size: 12px; color: #888; margin-left: 3px; font-weight: 400; }
     .card-sub { font-size: 13px; margin-top: 4px; color: #555; }
 
-    /* Tabla */
     .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .table-header h3 { font-size: 15px; font-weight: 600; }
     .table-wrap { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; overflow-x: auto; }
@@ -73,12 +76,11 @@
     thead th {
       background: #f7f7f5; font-weight: 600; font-size: 11px;
       text-transform: uppercase; letter-spacing: 0.04em; color: #666;
-      padding: 10px 14px; text-align: center; border-bottom: 1px solid #e8e8e8;
-      white-space: nowrap;
+      padding: 10px 14px; text-align: center; border-bottom: 1px solid #e8e8e8; white-space: nowrap;
     }
     thead th.left { text-align: left; }
     thead .sub-header th { background: #f7f7f5; font-size: 10px; color: #999; padding: 4px 14px 8px; border-bottom: 1px solid #e8e8e8; text-transform: none; letter-spacing: 0; }
-    tbody td { padding: 9px 14px; text-align: center; border-bottom: 1px solid #f0f0ee; color: #1a1a1a; }
+    tbody td { padding: 9px 14px; text-align: center; border-bottom: 1px solid #f0f0ee; }
     tbody td.left { text-align: left; font-weight: 500; }
     tbody tr:last-child td { border-bottom: none; }
     tbody tr:hover td { background: #fafaf8; }
@@ -91,18 +93,11 @@
     .below { color: #993c1d; font-weight: 500; }
     .na { color: #bbb; font-style: italic; }
     .col-note { font-size: 10px; color: #999; display: block; font-weight: 400; text-transform: none; letter-spacing: 0; margin-top: 1px; }
-
-    /* Footer */
     .footer { margin-top: 2rem; font-size: 11px; color: #bbb; text-align: center; }
     .footer a { color: #bbb; }
-
     @media (max-width: 680px) {
       .form-grid { grid-template-columns: 1fr 1fr; }
       .summary-cards { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 420px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .form-group.full, .form-group.span2 { grid-column: 1; }
     }
   </style>
 </head>
@@ -111,65 +106,74 @@
   <h1>Climatología mensual histórica</h1>
   <p class="subtitle">Datos certificados AEMET OpenData · Precipitación media diaria y días de lluvia apreciable</p>
 
+  <!-- Paso 1: API Key -->
   <div class="form-card">
-    <h2>Configuración de consulta</h2>
+    <h2>1. API Key</h2>
+    <div class="form-group full">
+      <label>API Key de AEMET OpenData</label>
+      <div class="api-row">
+        <input type="password" id="apiKey" placeholder="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..." />
+        <button class="btn btn-sm" id="btnMostrar" onclick="toggleKey()">Mostrar</button>
+        <button class="btn btn-sm btn-primary" onclick="cargarEstaciones()">Cargar estaciones</button>
+      </div>
+      <p class="hint">Obtener en opendata.aemet.es → Mi perfil → API Key</p>
+    </div>
+    <div id="statusEst" class="status"></div>
+  </div>
+
+  <!-- Paso 2: Selección estación + consulta -->
+  <div class="form-card" id="cardFiltros" style="display:none">
+    <h2>2. Selección de estación</h2>
     <div class="form-grid">
-
-      <div class="form-group full">
-        <label>API Key de AEMET OpenData</label>
-        <div class="api-row">
-          <input type="password" id="apiKey" placeholder="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..." />
-          <button class="btn btn-sm" onclick="toggleKey()">Mostrar</button>
-        </div>
-        <p class="hint">Obtener en opendata.aemet.es → Mi perfil → API Key</p>
-      </div>
-
-      <div class="form-group span2">
-        <label>Código de estación (indicativo AEMET)</label>
-        <input type="text" id="station" placeholder="ej. 6155A  (Málaga aeropuerto)" />
-        <p class="hint">Consultar indicativos en el catálogo de estaciones de opendata.aemet.es</p>
-      </div>
-
       <div class="form-group">
-        <label>Nombre descriptivo (opcional)</label>
-        <input type="text" id="stationName" placeholder="ej. Málaga aeropuerto" />
+        <label>Comunidad autónoma</label>
+        <select id="selCCAA" onchange="filtrarProvincias()">
+          <option value="">— Selecciona —</option>
+        </select>
       </div>
+      <div class="form-group">
+        <label>Provincia</label>
+        <select id="selProv" onchange="filtrarEstaciones()" disabled>
+          <option value="">— Selecciona CCAA —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Estación</label>
+        <select id="selEst" onchange="seleccionarEstacion()" disabled>
+          <option value="">— Selecciona provincia —</option>
+        </select>
+      </div>
+    </div>
+    <div id="stationInfo" class="station-info"></div>
 
+    <hr class="sep">
+
+    <h2>3. Parámetros de consulta</h2>
+    <div class="form-grid">
       <div class="form-group">
         <label>Mes a consultar</label>
         <select id="mes">
-          <option value="01">Enero</option>
-          <option value="02">Febrero</option>
-          <option value="03">Marzo</option>
-          <option value="04">Abril</option>
-          <option value="05">Mayo</option>
-          <option value="06">Junio</option>
-          <option value="07">Julio</option>
-          <option value="08">Agosto</option>
-          <option value="09">Septiembre</option>
-          <option value="10">Octubre</option>
-          <option value="11">Noviembre</option>
-          <option value="12" selected>Diciembre</option>
+          <option value="01">Enero</option><option value="02">Febrero</option>
+          <option value="03">Marzo</option><option value="04">Abril</option>
+          <option value="05">Mayo</option><option value="06">Junio</option>
+          <option value="07">Julio</option><option value="08">Agosto</option>
+          <option value="09">Septiembre</option><option value="10">Octubre</option>
+          <option value="11">Noviembre</option><option value="12" selected>Diciembre</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Número de años históricos</label>
         <input type="number" id="nAnios" value="10" min="1" max="30" />
         <p class="hint">Contados hacia atrás desde el año de referencia</p>
       </div>
-
       <div class="form-group">
         <label>Año de referencia (fin de serie)</label>
         <input type="number" id="anioFin" value="2024" min="1950" max="2025" />
       </div>
-
     </div>
-
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="consultar()">Consultar</button>
+      <button class="btn btn-primary" id="btnConsultar" onclick="consultar()" disabled>Consultar</button>
     </div>
-
     <div id="status" class="status"></div>
     <div class="progress-bar" id="prog"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
   </div>
@@ -177,7 +181,6 @@
   <!-- Resultados -->
   <div id="results" class="results">
     <div class="summary-cards" id="cards"></div>
-
     <div class="table-header">
       <h3 id="tableTitle"></h3>
       <div style="display:flex;gap:8px;">
@@ -185,14 +188,10 @@
         <button class="btn btn-sm" onclick="copyTable()">Copiar tabla</button>
       </div>
     </div>
-
-    <div class="table-wrap">
-      <table id="mainTable"></table>
-    </div>
-
+    <div class="table-wrap"><table id="mainTable"></table></div>
     <p style="font-size:11px;color:#bbb;margin-top:8px;">
       Precipitación media diaria = precipitación total del mes ÷ días del mes (incluye años bisiestos).
-      Días de lluvia apreciable: días con precipitación ≥ 1 mm (campo nw_prec AEMET).
+      Días de lluvia apreciable: días con precipitación ≥ 1 mm.
     </p>
   </div>
 
@@ -203,258 +202,354 @@
 </div>
 
 <script>
-  const MESES_LABEL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  let resultData = [];
-  let keyVisible = false;
+const MESES_LABEL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-  function toggleKey() {
-    const inp = document.getElementById('apiKey');
-    keyVisible = !keyVisible;
-    inp.type = keyVisible ? 'text' : 'password';
-    event.target.textContent = keyVisible ? 'Ocultar' : 'Mostrar';
+// Mapa CCAA → array de nombres de provincia tal como los devuelve AEMET
+const PROV_CCAA = {
+  'ALBACETE':'Castilla-La Mancha','ALICANTE':'Comunitat Valenciana','ALICANTE/ALACANT':'Comunitat Valenciana',
+  'ALMERIA':'Andalucía','ALMERÍA':'Andalucía','ARABA/ÁLAVA':'País Vasco','ARABA':'País Vasco','ÁLAVA':'País Vasco',
+  'ASTURIAS':'Asturias','AVILA':'Castilla y León','ÁVILA':'Castilla y León',
+  'BADAJOZ':'Extremadura','BALEARS (ILLES)':'Baleares','ILLES BALEARS':'Baleares','BALEARS':'Baleares',
+  'BARCELONA':'Cataluña','BIZKAIA':'País Vasco','BIZKAIA/VIZCAYA':'País Vasco','VIZCAYA':'País Vasco',
+  'BURGOS':'Castilla y León','CACERES':'Extremadura','CÁCERES':'Extremadura',
+  'CADIZ':'Andalucía','CÁDIZ':'Andalucía','CANTABRIA':'Cantabria','CASTELLON':'Comunitat Valenciana',
+  'CASTELLON/CASTELLÓ':'Comunitat Valenciana','CASTELLÓ':'Comunitat Valenciana','CEUTA':'Ceuta',
+  'CIUDAD REAL':'Castilla-La Mancha','CORDOBA':'Andalucía','CÓRDOBA':'Andalucía',
+  'CORUÑA (A)':'Galicia','A CORUÑA':'Galicia','CUENCA':'Castilla-La Mancha',
+  'GIRONA':'Cataluña','GERONA':'Cataluña','GRANADA':'Andalucía','GUADALAJARA':'Castilla-La Mancha',
+  'GUIPUZCOA':'País Vasco','GIPUZKOA':'País Vasco','GIPUZKOA/GUIPÚZCOA':'País Vasco',
+  'HUELVA':'Andalucía','HUESCA':'Aragón','JAEN':'Andalucía','JAÉN':'Andalucía',
+  'LA RIOJA':'La Rioja','RIOJA (LA)':'La Rioja','RIOJA, LA':'La Rioja',
+  'LAS PALMAS':'Canarias','LEON':'Castilla y León','LEÓN':'Castilla y León',
+  'LLEIDA':'Cataluña','LÉRIDA':'Cataluña','LUGO':'Galicia','MADRID':'Madrid',
+  'MALAGA':'Andalucía','MÁLAGA':'Andalucía','MELILLA':'Melilla','MURCIA':'Murcia',
+  'NAVARRA':'Navarra','OURENSE':'Galicia','ORENSE':'Galicia','PALENCIA':'Castilla y León',
+  'PALMAS (LAS)':'Canarias','PONTEVEDRA':'Galicia','SALAMANCA':'Castilla y León',
+  'SANTA CRUZ DE TENERIFE':'Canarias','SEGOVIA':'Castilla y León','SEVILLA':'Andalucía',
+  'SORIA':'Castilla y León','TARRAGONA':'Cataluña','TERUEL':'Aragón','TOLEDO':'Castilla-La Mancha',
+  'VALENCIA':'Comunitat Valenciana','VALENCIA/VALÈNCIA':'Comunitat Valenciana','VALÈNCIA':'Comunitat Valenciana',
+  'VALLADOLID':'Castilla y León','ZAMORA':'Castilla y León','ZARAGOZA':'Aragón',
+};
+
+let todasEstaciones = [];
+let estacionSel = null;
+let resultData  = [];
+let keyVisible  = false;
+
+function toggleKey() {
+  const inp = document.getElementById('apiKey');
+  keyVisible = !keyVisible;
+  inp.type = keyVisible ? 'text' : 'password';
+  document.getElementById('btnMostrar').textContent = keyVisible ? 'Ocultar' : 'Mostrar';
+}
+
+function showStatusEst(msg, type) {
+  const el = document.getElementById('statusEst');
+  el.textContent = msg; el.className = 'status ' + type;
+}
+function showStatus(msg, type) {
+  const el = document.getElementById('status');
+  el.textContent = msg; el.className = 'status ' + type;
+}
+function setProgress(pct) {
+  document.getElementById('prog').className = 'progress-bar' + (pct > 0 && pct < 100 ? ' on' : '');
+  document.getElementById('progFill').style.width = pct + '%';
+}
+function parseNum(v) {
+  if (v === undefined || v === null || v === '' || v === 'Ip') return null;
+  const n = parseFloat(String(v).replace(',', '.'));
+  return isNaN(n) ? null : n;
+}
+function diasDelMes(mes, anio) { return new Date(anio, parseInt(mes), 0).getDate(); }
+
+async function aemetGet(apiKey, url, intento) {
+  intento = intento || 1;
+  const full = 'https://opendata.aemet.es/opendata' + url +
+    (url.includes('?') ? '&' : '?') + 'api_key=' + encodeURIComponent(apiKey);
+  const r1 = await fetch(full);
+  if (r1.status === 429) {
+    if (intento >= 4) throw new Error('HTTP 429 — límite de peticiones AEMET superado');
+    const espera = intento * 3000;
+    showStatus('Límite de peticiones. Esperando ' + (espera/1000) + 's...', 'warn');
+    await new Promise(r => setTimeout(r, espera));
+    return aemetGet(apiKey, url, intento + 1);
   }
+  if (!r1.ok) throw new Error('HTTP ' + r1.status);
+  const j1 = await r1.json();
+  if (j1.estado !== 200) throw new Error(j1.descripcion || 'Estado AEMET: ' + j1.estado);
+  const r2 = await fetch(j1.datos);
+  if (!r2.ok) throw new Error('Datos HTTP ' + r2.status);
+  return await r2.json();
+}
 
-  function showStatus(msg, type) {
-    const el = document.getElementById('status');
-    el.textContent = msg;
-    el.className = 'status ' + type;
+function getCCAA(prov) {
+  if (!prov) return 'Otras';
+  const key = prov.trim().toUpperCase();
+  // Búsqueda exacta
+  if (PROV_CCAA[key]) return PROV_CCAA[key];
+  // Búsqueda parcial
+  for (const [k, v] of Object.entries(PROV_CCAA)) {
+    if (key.includes(k) || k.includes(key)) return v;
   }
+  return 'Otras';
+}
 
-  function setProgress(pct) {
-    document.getElementById('prog').className = 'progress-bar' + (pct > 0 && pct < 100 ? ' on' : '');
-    document.getElementById('progFill').style.width = pct + '%';
+async function cargarEstaciones() {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey) { showStatusEst('Introduce la API Key primero.', 'error'); return; }
+  showStatusEst('Cargando inventario de estaciones AEMET...', 'info');
+  try {
+    const datos = await aemetGet(apiKey, '/api/valores/climatologicos/inventarioestaciones/todasestaciones/');
+    if (!Array.isArray(datos) || datos.length === 0) throw new Error('Sin datos de estaciones');
+    todasEstaciones = datos;
+    showStatusEst(datos.length + ' estaciones cargadas correctamente.', 'success');
+    poblarCCAA();
+    document.getElementById('cardFiltros').style.display = 'block';
+  } catch(e) {
+    showStatusEst('Error al cargar estaciones: ' + e.message, 'error');
   }
+}
 
-  function parseNum(v) {
-    if (v === undefined || v === null || v === '' || v === 'Ip') return null;
-    const n = parseFloat(String(v).replace(',', '.'));
-    return isNaN(n) ? null : n;
+function poblarCCAA() {
+  const ccaaSet = new Set();
+  todasEstaciones.forEach(e => ccaaSet.add(getCCAA(e.provincia)));
+  const sel = document.getElementById('selCCAA');
+  sel.innerHTML = '<option value="">— Selecciona —</option>';
+  [...ccaaSet].sort().forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    sel.appendChild(opt);
+  });
+}
+
+function filtrarProvincias() {
+  const ccaa = document.getElementById('selCCAA').value;
+  const selProv = document.getElementById('selProv');
+  const selEst  = document.getElementById('selEst');
+  selProv.innerHTML = '<option value="">— Selecciona —</option>';
+  selEst.innerHTML  = '<option value="">— Selecciona provincia —</option>';
+  selProv.disabled = true; selEst.disabled = true;
+  estacionSel = null;
+  document.getElementById('stationInfo').style.display = 'none';
+  document.getElementById('btnConsultar').disabled = true;
+  if (!ccaa) return;
+  const provSet = new Set();
+  todasEstaciones.filter(e => getCCAA(e.provincia) === ccaa).forEach(e => provSet.add((e.provincia || '').trim()));
+  [...provSet].sort().forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p; opt.textContent = p;
+    selProv.appendChild(opt);
+  });
+  selProv.disabled = false;
+}
+
+function filtrarEstaciones() {
+  const prov   = document.getElementById('selProv').value;
+  const selEst = document.getElementById('selEst');
+  selEst.innerHTML = '<option value="">— Selecciona —</option>';
+  selEst.disabled  = true;
+  estacionSel = null;
+  document.getElementById('stationInfo').style.display = 'none';
+  document.getElementById('btnConsultar').disabled = true;
+  if (!prov) return;
+  todasEstaciones
+    .filter(e => (e.provincia || '').trim() === prov)
+    .sort((a, b) => (a.nombre || '').localeCompare(b.nombre || '', 'es'))
+    .forEach(e => {
+      const opt = document.createElement('option');
+      opt.value = e.indicativo;
+      opt.textContent = e.nombre + ' (' + e.indicativo + ')';
+      selEst.appendChild(opt);
+    });
+  selEst.disabled = false;
+}
+
+function seleccionarEstacion() {
+  const ind  = document.getElementById('selEst').value;
+  const info = document.getElementById('stationInfo');
+  if (!ind) { info.style.display='none'; estacionSel=null; document.getElementById('btnConsultar').disabled=true; return; }
+  estacionSel = todasEstaciones.find(e => e.indicativo === ind);
+  if (estacionSel) {
+    info.innerHTML =
+      '<span><strong>Indicativo:</strong> ' + estacionSel.indicativo + '</span>' +
+      '<span><strong>Altitud:</strong> ' + (estacionSel.altitud || '—') + ' m</span>' +
+      '<span><strong>Lat:</strong> ' + (estacionSel.latitud || '—') + '</span>' +
+      '<span><strong>Lon:</strong> ' + (estacionSel.longitud || '—') + '</span>';
+    info.style.display = 'block';
+    document.getElementById('btnConsultar').disabled = false;
   }
+}
 
-  function diasDelMes(mes, anio) {
-    return new Date(anio, parseInt(mes), 0).getDate();
-  }
+async function consultar() {
+  if (!estacionSel) { showStatus('Selecciona una estación.', 'error'); return; }
+  const apiKey  = document.getElementById('apiKey').value.trim();
+  const mes     = document.getElementById('mes').value;
+  const nAnios  = parseInt(document.getElementById('nAnios').value);
+  const anioFin = parseInt(document.getElementById('anioFin').value);
+  const station = estacionSel.indicativo;
 
-  async function aemetFetch(apiKey, url, intento = 1) {
-    const full = 'https://opendata.aemet.es/opendata' + url +
-      (url.includes('?') ? '&' : '?') + 'api_key=' + encodeURIComponent(apiKey);
-    const r1 = await fetch(full);
-    if (r1.status === 429) {
-      if (intento >= 4) throw new Error('HTTP 429 — límite de peticiones AEMET superado');
-      const espera = intento * 3000;
-      showStatus(`Límite de peticiones alcanzado. Esperando ${espera/1000}s antes de reintentar (intento ${intento}/3)...`, 'info');
-      await new Promise(r => setTimeout(r, espera));
-      return aemetFetch(apiKey, url, intento + 1);
-    }
-    if (!r1.ok) throw new Error('HTTP ' + r1.status);
-    const j1 = await r1.json();
-    if (j1.estado !== 200) throw new Error(j1.descripcion || 'Estado AEMET: ' + j1.estado);
-    const r2 = await fetch(j1.datos);
-    if (!r2.ok) throw new Error('Datos HTTP ' + r2.status);
-    return await r2.json();
-  }
+  if (nAnios < 1 || nAnios > 30) { showStatus('El número de años debe estar entre 1 y 30.', 'error'); return; }
 
-  async function consultar() {
-    const apiKey     = document.getElementById('apiKey').value.trim();
-    const station    = document.getElementById('station').value.trim();
-    const mes        = document.getElementById('mes').value;
-    const nAnios     = parseInt(document.getElementById('nAnios').value);
-    const anioFin    = parseInt(document.getElementById('anioFin').value);
+  const anioIni = anioFin - nAnios + 1;
+  resultData = [];
+  document.getElementById('results').style.display = 'none';
+  showStatus('Consultando ' + nAnios + ' año(s) (' + anioIni + '–' + anioFin + '), mes: ' + MESES_LABEL[parseInt(mes)-1] + '...', 'info');
+  setProgress(5);
 
-    if (!apiKey)   { showStatus('Introduce la API Key.', 'error'); return; }
-    if (!station)  { showStatus('Introduce el código de estación.', 'error'); return; }
-    if (nAnios < 1 || nAnios > 30) { showStatus('El número de años debe estar entre 1 y 30.', 'error'); return; }
+  const años = [];
+  for (let y = anioIni; y <= anioFin; y++) años.push(y);
 
-    const anioIni = anioFin - nAnios + 1;
-    resultData = [];
-    document.getElementById('results').style.display = 'none';
-    showStatus(`Consultando ${nAnios} año(s) (${anioIni}–${anioFin}), mes: ${MESES_LABEL[parseInt(mes)-1]}...`, 'info');
-    setProgress(5);
-
-    const años = [];
-    for (let y = anioIni; y <= anioFin; y++) años.push(y);
-
-    let errores = 0;
-    for (let i = 0; i < años.length; i++) {
-      const y = años[i];
-      setProgress(Math.round(5 + 90 * (i / años.length)));
-      showStatus(`Consultando ${y} (${i + 1} de ${años.length})...`, 'info');
-      try {
-        const url = `/api/valores/climatologicos/mensualesanuales/datos/anioini/${y}/aniofin/${y}/estacion/${station}/`;
-        const datos = await aemetFetch(apiKey, url);
-        if (Array.isArray(datos)) {
-          if (datos[0]) console.log('Campos AEMET año ' + y + ':', Object.keys(datos[0]).join(', '), '| muestra:', JSON.stringify(datos[0]).substring(0, 300));
-          const fila = datos.find(d => {
-            if (d.fecha) return d.fecha.startsWith(`${y}-${mes}`);
-            if (d.mes)   return String(parseInt(d.mes)).padStart(2,'0') === mes;
-            return true;
-          }) || datos[0];
-          if (fila) {
-            const nd     = diasDelMes(mes, y);
-            const pTotal = parseNum(fila.p_mes);
-            const pDia   = pTotal !== null ? pTotal / nd : null;
-            // AEMET usa distintos nombres según la estación: nw_prec, n_prec, np_001, nd_prec, ndias_prec
-            const diasRaw = fila.nw_prec ?? fila.n_prec ?? fila.np_001 ?? fila.nd_prec ?? fila.ndias_prec ?? fila.np ?? null;
-            resultData.push({ año: y, diasMes: nd, pTotal, pDia, dias: parseNum(diasRaw) });
-          } else {
-            resultData.push({ año: y, diasMes: diasDelMes(mes, y), pTotal: null, pDia: null, dias: null });
+  let errores = 0;
+  for (let i = 0; i < años.length; i++) {
+    const y = años[i];
+    setProgress(Math.round(5 + 90 * (i / años.length)));
+    showStatus('Consultando ' + y + ' (' + (i+1) + ' de ' + años.length + ')...', 'info');
+    try {
+      const url  = '/api/valores/climatologicos/mensualesanuales/datos/anioini/' + y + '/aniofin/' + y + '/estacion/' + station + '/';
+      const datos = await aemetGet(apiKey, url);
+      if (Array.isArray(datos)) {
+        if (i === 0 && datos[0]) console.log('Campos AEMET:', Object.keys(datos[0]).join(', '));
+        const mesInt = parseInt(mes);
+        const fila = datos.find(d => {
+          if (d.fecha) {
+            // AEMET devuelve fecha como "YYYY-M" (sin cero) o "YYYY-MM"
+            const parts = d.fecha.split('-');
+            if (parts.length >= 2) return parseInt(parts[1]) === mesInt;
           }
+          if (d.mes) return parseInt(d.mes) === mesInt;
+          return false;
+        });
+        if (fila) {
+          const nd      = diasDelMes(mes, y);
+          const pTotal  = parseNum(fila.p_mes);
+          const pDia    = pTotal !== null ? pTotal / nd : null;
+          const diasRaw = fila.nw_prec !== undefined ? fila.nw_prec :
+                          fila.n_prec  !== undefined ? fila.n_prec  :
+                          fila.np_001  !== undefined ? fila.np_001  :
+                          fila.nd_prec !== undefined ? fila.nd_prec : null;
+          resultData.push({ año: y, diasMes: nd, pTotal, pDia, dias: parseNum(diasRaw) });
         } else {
           resultData.push({ año: y, diasMes: diasDelMes(mes, y), pTotal: null, pDia: null, dias: null });
         }
-      } catch(e) {
+      } else {
         resultData.push({ año: y, diasMes: diasDelMes(mes, y), pTotal: null, pDia: null, dias: null });
-        errores++;
-        if (errores > Math.max(2, años.length * 0.4)) {
-          showStatus('Demasiados errores. Verifica la API Key y el código de estación. Detalle: ' + e.message, 'error');
-          setProgress(0);
-          return;
-        }
       }
-      await new Promise(r => setTimeout(r, 1500));
+    } catch(e) {
+      resultData.push({ año: y, diasMes: diasDelMes(mes, y), pTotal: null, pDia: null, dias: null });
+      errores++;
+      if (errores > Math.max(2, años.length * 0.4)) {
+        showStatus('Demasiados errores. Detalle: ' + e.message, 'error');
+        setProgress(0); return;
+      }
     }
-
-    setProgress(100);
-    const conDatos = resultData.filter(r => r.pDia !== null || r.dias !== null);
-    if (conDatos.length === 0) {
-      showStatus('No se han obtenido datos. Verifica el código de estación y el rango de años.', 'error');
-      return;
-    }
-    showStatus(`Consulta completada: datos para ${conDatos.length} de ${años.length} año(s).`, 'success');
-    renderResults(mes);
+    await new Promise(r => setTimeout(r, 1500));
   }
 
-  function renderResults(mes) {
-    const mesLabel = MESES_LABEL[parseInt(mes) - 1];
-    const stName   = document.getElementById('stationName').value.trim() || document.getElementById('station').value.trim();
+  setProgress(100);
+  const conDatos = resultData.filter(r => r.pDia !== null || r.dias !== null);
+  if (conDatos.length === 0) { showStatus('No se han obtenido datos para esta estación y período.', 'error'); return; }
+  showStatus('Consulta completada: datos para ' + conDatos.length + ' de ' + años.length + ' año(s).', 'success');
+  renderResults(mes);
+}
 
-    document.getElementById('tableTitle').textContent = `${mesLabel} — Serie histórica · ${stName}`;
+function renderResults(mes) {
+  const mesLabel = MESES_LABEL[parseInt(mes) - 1];
+  const stName   = estacionSel ? estacionSel.nombre : '—';
+  const stId     = estacionSel ? estacionSel.indicativo : '—';
+  document.getElementById('tableTitle').textContent = mesLabel + ' — Serie histórica · ' + stName + ' (' + stId + ')';
 
-    const withP    = resultData.filter(r => r.pDia !== null);
-    const withD    = resultData.filter(r => r.dias !== null);
-    const mediaPDia = withP.length ? withP.reduce((s, r) => s + r.pDia, 0) / withP.length : null;
-    const mediaD    = withD.length ? withD.reduce((s, r) => s + r.dias, 0) / withD.length : null;
-    const maxPDia   = withP.length ? Math.max(...withP.map(r => r.pDia)) : 1;
-    const maxD      = withD.length ? Math.max(...withD.map(r => r.dias))  : 1;
-    const anioMax   = withP.length ? withP.reduce((a, b) => a.pDia > b.pDia ? a : b).año : '—';
+  const withP     = resultData.filter(r => r.pDia !== null);
+  const withD     = resultData.filter(r => r.dias !== null);
+  const mediaPDia = withP.length ? withP.reduce((s,r) => s+r.pDia, 0) / withP.length : null;
+  const mediaD    = withD.length ? withD.reduce((s,r) => s+r.dias, 0) / withD.length : null;
+  const maxPDia   = withP.length ? Math.max(...withP.map(r => r.pDia)) : 1;
+  const maxD      = withD.length ? Math.max(...withD.map(r => r.dias)) : 1;
+  const anioMax   = withP.length ? withP.reduce((a,b) => a.pDia>b.pDia?a:b).año : '—';
 
-    document.getElementById('cards').innerHTML = `
-      <div class="card">
-        <div class="card-label">Estación</div>
-        <div class="card-sub" style="font-size:15px;font-weight:600;margin-top:2px">${stName}</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Prec. media diaria · ${mesLabel}</div>
-        <div class="card-value">${mediaPDia !== null ? mediaPDia.toFixed(2) : '—'}<span class="card-unit">mm/día</span></div>
-        <div class="card-sub">Media de la serie</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Días lluvia apreciable</div>
-        <div class="card-value">${mediaD !== null ? mediaD.toFixed(1) : '—'}<span class="card-unit">días</span></div>
-        <div class="card-sub">Media de la serie</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Año más lluvioso</div>
-        <div class="card-value" style="font-size:28px">${anioMax}</div>
-      </div>
-    `;
+  document.getElementById('cards').innerHTML =
+    '<div class="card"><div class="card-label">Estación</div>' +
+    '<div class="card-sub" style="font-size:15px;font-weight:600;margin-top:2px">' + stName + '</div>' +
+    '<div class="card-sub">' + stId + '</div></div>' +
+    '<div class="card"><div class="card-label">Prec. media diaria · ' + mesLabel + '</div>' +
+    '<div class="card-value">' + (mediaPDia!==null?mediaPDia.toFixed(2):'—') + '<span class="card-unit">mm/día</span></div>' +
+    '<div class="card-sub">Media de la serie</div></div>' +
+    '<div class="card"><div class="card-label">Días lluvia apreciable</div>' +
+    '<div class="card-value">' + (mediaD!==null?mediaD.toFixed(1):'—') + '<span class="card-unit">días</span></div>' +
+    '<div class="card-sub">Media de la serie</div></div>' +
+    '<div class="card"><div class="card-label">Año más lluvioso</div>' +
+    '<div class="card-value" style="font-size:28px">' + anioMax + '</div></div>';
 
-    let html = `
-      <thead>
-        <tr>
-          <th class="left" rowspan="2">Año</th>
-          <th rowspan="2">Días del mes</th>
-          <th rowspan="2">Prec. total<span class="col-note">mm</span></th>
-          <th colspan="3">Precipitación media diaria</th>
-          <th colspan="3">Días de lluvia apreciable</th>
-        </tr>
-        <tr class="sub-header">
-          <th>mm/día</th>
-          <th style="min-width:110px"></th>
-          <th>vs. media</th>
-          <th>días</th>
-          <th style="min-width:90px"></th>
-          <th>vs. media</th>
-        </tr>
-      </thead>
-      <tbody>
-    `;
+  let html = '<thead><tr>' +
+    '<th class="left" rowspan="2">Año</th>' +
+    '<th rowspan="2">Días del mes</th>' +
+    '<th rowspan="2">Prec. total<span class="col-note">mm</span></th>' +
+    '<th colspan="3">Precipitación media diaria</th>' +
+    '<th colspan="3">Días de lluvia apreciable</th></tr>' +
+    '<tr class="sub-header"><th>mm/día</th><th style="min-width:110px"></th><th>vs. media</th>' +
+    '<th>días</th><th style="min-width:90px"></th><th>vs. media</th></tr></thead><tbody>';
 
-    resultData.forEach(r => {
-      const pBar  = r.pDia !== null ? Math.round((r.pDia / maxPDia) * 100) : 0;
-      const dBar  = r.dias !== null ? Math.round((r.dias / maxD)    * 80)  : 0;
-      const diffP = (r.pDia !== null && mediaPDia !== null) ? r.pDia - mediaPDia : null;
-      const diffD = (r.dias !== null && mediaD    !== null) ? r.dias - mediaD    : null;
-      const signP = diffP !== null ? (diffP >= 0 ? '+' : '') : '';
-      const signD = diffD !== null ? (diffD >= 0 ? '+' : '') : '';
-      const clsP  = diffP !== null ? (diffP >= 0 ? 'above' : 'below') : '';
-      const clsD  = diffD !== null ? (diffD >= 0 ? 'above' : 'below') : '';
+  resultData.forEach(r => {
+    const pBar  = r.pDia!==null ? Math.round((r.pDia/maxPDia)*100) : 0;
+    const dBar  = r.dias!==null ? Math.round((r.dias/maxD)*80)     : 0;
+    const diffP = (r.pDia!==null&&mediaPDia!==null) ? r.pDia-mediaPDia : null;
+    const diffD = (r.dias!==null&&mediaD!==null)    ? r.dias-mediaD    : null;
+    const sP    = diffP!==null?(diffP>=0?'+':''):'';
+    const sD    = diffD!==null?(diffD>=0?'+':''):'';
+    const cP    = diffP!==null?(diffP>=0?'above':'below'):'';
+    const cD    = diffD!==null?(diffD>=0?'above':'below'):'';
+    html += '<tr>' +
+      '<td class="left">' + r.año + '</td>' +
+      '<td>' + r.diasMes + '</td>' +
+      '<td>' + (r.pTotal!==null?r.pTotal.toFixed(1):'<span class="na">s/d</span>') + '</td>' +
+      '<td>' + (r.pDia!==null?r.pDia.toFixed(2):'<span class="na">s/d</span>') + '</td>' +
+      '<td class="bar-cell"><div class="bar-wrap"><div class="bar" style="width:' + pBar + 'px"></div></div></td>' +
+      '<td class="' + cP + '">' + (diffP!==null?sP+diffP.toFixed(2)+' mm/d':'<span class="na">—</span>') + '</td>' +
+      '<td>' + (r.dias!==null?Math.round(r.dias):'<span class="na">s/d</span>') + '</td>' +
+      '<td class="bar-cell"><div class="bar-wrap"><div class="bar bar-dias" style="width:' + dBar + 'px"></div></div></td>' +
+      '<td class="' + cD + '">' + (diffD!==null?sD+diffD.toFixed(1)+' días':'<span class="na">—</span>') + '</td>' +
+      '</tr>';
+  });
 
-      html += `<tr>
-        <td class="left">${r.año}</td>
-        <td>${r.diasMes}</td>
-        <td>${r.pTotal !== null ? r.pTotal.toFixed(1) : '<span class="na">s/d</span>'}</td>
-        <td>${r.pDia   !== null ? r.pDia.toFixed(2)  : '<span class="na">s/d</span>'}</td>
-        <td class="bar-cell"><div class="bar-wrap"><div class="bar" style="width:${pBar}px"></div></div></td>
-        <td class="${clsP}">${diffP !== null ? signP + diffP.toFixed(2) + ' mm/d' : '<span class="na">—</span>'}</td>
-        <td>${r.dias !== null ? Math.round(r.dias) : '<span class="na">s/d</span>'}</td>
-        <td class="bar-cell"><div class="bar-wrap"><div class="bar bar-dias" style="width:${dBar}px"></div></div></td>
-        <td class="${clsD}">${diffD !== null ? signD + diffD.toFixed(1) + ' días' : '<span class="na">—</span>'}</td>
-      </tr>`;
-    });
+  html += '<tr class="media-row"><td class="left">Media serie</td><td>—</td><td>—</td>' +
+    '<td>' + (mediaPDia!==null?mediaPDia.toFixed(2):'—') + '</td><td></td><td></td>' +
+    '<td>' + (mediaD!==null?mediaD.toFixed(1):'—') + '</td><td></td><td></td></tr></tbody>';
 
-    html += `<tr class="media-row">
-      <td class="left">Media serie</td>
-      <td>—</td>
-      <td>—</td>
-      <td>${mediaPDia !== null ? mediaPDia.toFixed(2) : '—'}</td>
-      <td></td><td></td>
-      <td>${mediaD !== null ? mediaD.toFixed(1) : '—'}</td>
-      <td></td><td></td>
-    </tr>`;
+  document.getElementById('mainTable').innerHTML = html;
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
-    html += '</tbody>';
-    document.getElementById('mainTable').innerHTML = html;
-    document.getElementById('results').style.display = 'block';
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+function exportCSV() {
+  const mes      = document.getElementById('mes').value;
+  const mesLabel = MESES_LABEL[parseInt(mes)-1];
+  const stId     = estacionSel ? estacionSel.indicativo : '';
+  const stName   = estacionSel ? estacionSel.nombre     : '';
+  let csv = 'Estacion;Indicativo;Mes;Año;Dias_mes;Prec_total_mm;Prec_media_diaria_mm_dia;Dias_lluvia_apreciable\n';
+  resultData.forEach(r => {
+    csv += ['"'+stName+'"',stId,mesLabel,r.año,r.diasMes,
+      r.pTotal!==null?r.pTotal.toFixed(1):'',
+      r.pDia!==null?r.pDia.toFixed(2):'',
+      r.dias!==null?Math.round(r.dias):''
+    ].join(';') + '\n';
+  });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
+  a.download = 'aemet_' + stId + '_' + mesLabel + '.csv';
+  a.click();
+}
 
-  function exportCSV() {
-    const mes      = document.getElementById('mes').value;
-    const mesLabel = MESES_LABEL[parseInt(mes) - 1];
-    const st       = document.getElementById('station').value.trim();
-    const stName   = document.getElementById('stationName').value.trim() || st;
-    let csv = 'Estacion;Mes;Año;Dias_mes;Prec_total_mm;Prec_media_diaria_mm_dia;Dias_lluvia_apreciable\n';
-    resultData.forEach(r => {
-      csv += [
-        `"${stName}"`, mesLabel, r.año, r.diasMes,
-        r.pTotal !== null ? r.pTotal.toFixed(1) : '',
-        r.pDia   !== null ? r.pDia.toFixed(2)   : '',
-        r.dias   !== null ? Math.round(r.dias)   : ''
-      ].join(';') + '\n';
-    });
-    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `aemet_${st}_${mesLabel}.csv`;
-    a.click();
-  }
-
-  function copyTable() {
-    const table = document.getElementById('mainTable');
-    let text = '';
-    table.querySelectorAll('tr').forEach(tr => {
-      const cells = Array.from(tr.querySelectorAll('th,td'));
-      const filtered = cells.filter((_, i) => i !== 4 && i !== 7);
-      text += filtered.map(c => c.innerText.trim()).join('\t') + '\n';
-    });
-    navigator.clipboard.writeText(text).then(() => {
-      showStatus('Tabla copiada al portapapeles.', 'success');
-      setTimeout(() => { document.getElementById('status').className = 'status'; }, 2500);
-    }).catch(() => {
-      showStatus('No se pudo copiar. Selecciona la tabla manualmente.', 'error');
-    });
-  }
+function copyTable() {
+  const table = document.getElementById('mainTable');
+  let text = '';
+  table.querySelectorAll('tr').forEach(tr => {
+    text += Array.from(tr.querySelectorAll('th,td'))
+      .filter((_,i) => i!==4 && i!==7)
+      .map(c => c.innerText.trim()).join('\t') + '\n';
+  });
+  navigator.clipboard.writeText(text)
+    .then(() => { showStatus('Tabla copiada al portapapeles.','success'); setTimeout(()=>{document.getElementById('status').className='status';},2500); })
+    .catch(() => showStatus('No se pudo copiar. Selecciona la tabla manualmente.','error'));
+}
 </script>
 </body>
 </html>
