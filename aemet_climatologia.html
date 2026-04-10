@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AEMET — Histórico mensual</title>
+  <title>AEMET — Climatología y Fuerza Mayor</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size: 14px; background: #f5f5f3; color: #1a1a1a; min-height: 100vh; }
@@ -15,16 +15,9 @@
     .form-card h2 { font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
     .form-group { display: flex; flex-direction: column; gap: 5px; }
-    .form-group.full  { grid-column: 1 / -1; }
-    .form-group.span2 { grid-column: span 2; }
+    .form-group.full { grid-column: 1 / -1; }
     label { font-size: 12px; font-weight: 500; color: #555; }
-    input, select {
-      height: 38px; padding: 0 10px;
-      border: 1px solid #ddd; border-radius: 6px;
-      background: #fff; color: #1a1a1a;
-      font-size: 14px; font-family: inherit; width: 100%;
-      transition: border-color 0.15s;
-    }
+    input, select { height: 38px; padding: 0 10px; border: 1px solid #ddd; border-radius: 6px; background: #fff; color: #1a1a1a; font-size: 14px; font-family: inherit; width: 100%; transition: border-color 0.15s; }
     input:focus, select:focus { outline: none; border-color: #555; }
     select:disabled { background: #f7f7f5; color: #aaa; }
     .hint { font-size: 11px; color: #999; }
@@ -32,21 +25,17 @@
     .api-row input { flex: 1; }
     .sep { border: none; border-top: 1px solid #f0f0ee; margin: 1.25rem 0; }
 
-    .btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 1rem; }
-    .btn {
-      height: 38px; padding: 0 20px;
-      border: 1px solid #ccc; border-radius: 6px;
-      background: #fff; color: #1a1a1a;
-      font-size: 14px; font-family: inherit;
-      cursor: pointer; white-space: nowrap;
-      transition: background 0.12s;
-    }
+    .btn { height: 38px; padding: 0 20px; border: 1px solid #ccc; border-radius: 6px; background: #fff; color: #1a1a1a; font-size: 14px; font-family: inherit; cursor: pointer; white-space: nowrap; transition: background 0.12s; }
     .btn:hover { background: #f0f0ee; }
     .btn:active { transform: scale(0.98); }
     .btn-primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
     .btn-primary:hover { background: #333; }
+    .btn-danger { background: #fff; color: #c81e1e; border-color: #f5c6c6; }
+    .btn-fm { background: #0f6e56; color: #fff; border-color: #0f6e56; }
+    .btn-fm:hover { background: #0a5240; }
     .btn-sm { height: 30px; font-size: 12px; padding: 0 12px; }
     .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 1rem; }
 
     .status { font-size: 13px; padding: 10px 14px; border-radius: 7px; margin: 1rem 0; display: none; }
     .status.info    { background: #e8f0fe; color: #1a56db; display: block; }
@@ -61,7 +50,7 @@
     .station-info span { margin-right: 16px; }
     .station-info strong { color: #1a1a1a; }
 
-    .results { display: none; }
+    /* Resumen histórico */
     .summary-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.5rem; }
     .card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 14px 16px; }
     .card-label { font-size: 11px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
@@ -69,15 +58,12 @@
     .card-unit { font-size: 12px; color: #888; margin-left: 3px; font-weight: 400; }
     .card-sub { font-size: 13px; margin-top: 4px; color: #555; }
 
+    /* Tablas genéricas */
     .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .table-header h3 { font-size: 15px; font-weight: 600; }
-    .table-wrap { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 700px; }
-    thead th {
-      background: #f7f7f5; font-weight: 600; font-size: 11px;
-      text-transform: uppercase; letter-spacing: 0.04em; color: #666;
-      padding: 10px 14px; text-align: center; border-bottom: 1px solid #e8e8e8; white-space: nowrap;
-    }
+    .table-wrap { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px; }
+    thead th { background: #f7f7f5; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: #666; padding: 10px 14px; text-align: center; border-bottom: 1px solid #e8e8e8; white-space: nowrap; }
     thead th.left { text-align: left; }
     thead .sub-header th { background: #f7f7f5; font-size: 10px; color: #999; padding: 4px 14px 8px; border-bottom: 1px solid #e8e8e8; text-transform: none; letter-spacing: 0; }
     tbody td { padding: 9px 14px; text-align: center; border-bottom: 1px solid #f0f0ee; }
@@ -93,20 +79,42 @@
     .below { color: #993c1d; font-weight: 500; }
     .na { color: #bbb; font-style: italic; }
     .col-note { font-size: 10px; color: #999; display: block; font-weight: 400; text-transform: none; letter-spacing: 0; margin-top: 1px; }
+
+    /* FM específico */
+    .fm-resumen { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 1.5rem; }
+    .fm-bloque { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 1.25rem; }
+    .fm-bloque h4 { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 1rem; }
+    .fm-stat { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 1px solid #f0f0ee; font-size: 13px; }
+    .fm-stat:last-child { border-bottom: none; }
+    .fm-stat-label { color: #666; }
+    .fm-stat-value { font-weight: 600; }
+    .fm-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 0.75rem; }
+    .fm-badge.activa { background: #fde8e8; color: #c81e1e; }
+    .fm-badge.no-activa { background: #f0f0ee; color: #666; }
+    .fm-badge.activa-frec { background: #fff3e0; color: #e65100; }
+
+    tr.fm-activa td { background: #fff8f8 !important; }
+    tr.fm-activa td.fm-mark { color: #c81e1e; font-weight: 700; }
+    tr.fm-no td.fm-mark { color: #bbb; }
+
+    .results { display: none; }
+    .fm-section { display: none; }
     .footer { margin-top: 2rem; font-size: 11px; color: #bbb; text-align: center; }
     .footer a { color: #bbb; }
+
     @media (max-width: 680px) {
       .form-grid { grid-template-columns: 1fr 1fr; }
       .summary-cards { grid-template-columns: 1fr 1fr; }
+      .fm-resumen { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 <div class="page">
-  <h1>Climatología mensual histórica</h1>
-  <p class="subtitle">Datos certificados AEMET OpenData · Precipitación media diaria y días de lluvia apreciable</p>
+  <h1>Climatología mensual · Análisis de fuerza mayor</h1>
+  <p class="subtitle">AEMET OpenData · Referencia histórica y análisis de activación de cláusulas contractuales</p>
 
-  <!-- Paso 1: API Key -->
+  <!-- 1. API Key -->
   <div class="form-card">
     <h2>1. API Key</h2>
     <div class="form-group full">
@@ -115,43 +123,39 @@
         <input type="password" id="apiKey" placeholder="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..." />
         <button class="btn btn-sm" id="btnMostrar" onclick="toggleKey()">Mostrar</button>
         <button class="btn btn-sm btn-primary" onclick="cargarEstaciones()">Cargar estaciones</button>
+        <button class="btn btn-sm btn-danger" id="btnBorrarKey" onclick="borrarKey()" style="display:none">Olvidar key</button>
       </div>
       <p class="hint">Obtener en opendata.aemet.es → Mi perfil → API Key</p>
     </div>
     <div id="statusEst" class="status"></div>
   </div>
 
-  <!-- Paso 2: Selección estación + consulta -->
+  <!-- 2. Estación -->
   <div class="form-card" id="cardFiltros" style="display:none">
-    <h2>2. Selección de estación</h2>
+    <h2>2. Estación meteorológica</h2>
     <div class="form-grid">
       <div class="form-group">
         <label>Comunidad autónoma</label>
-        <select id="selCCAA" onchange="filtrarProvincias()">
-          <option value="">— Selecciona —</option>
-        </select>
+        <select id="selCCAA" onchange="filtrarProvincias()"><option value="">— Selecciona —</option></select>
       </div>
       <div class="form-group">
         <label>Provincia</label>
-        <select id="selProv" onchange="filtrarEstaciones()" disabled>
-          <option value="">— Selecciona CCAA —</option>
-        </select>
+        <select id="selProv" onchange="filtrarEstaciones()" disabled><option value="">— Selecciona CCAA —</option></select>
       </div>
       <div class="form-group">
         <label>Estación</label>
-        <select id="selEst" onchange="seleccionarEstacion()" disabled>
-          <option value="">— Selecciona provincia —</option>
-        </select>
+        <select id="selEst" onchange="seleccionarEstacion()" disabled><option value="">— Selecciona provincia —</option></select>
       </div>
     </div>
     <div id="stationInfo" class="station-info"></div>
 
     <hr class="sep">
 
-    <h2>3. Parámetros de consulta</h2>
+    <!-- 3. Histórico -->
+    <h2>3. Referencia histórica</h2>
     <div class="form-grid">
       <div class="form-group">
-        <label>Mes a consultar</label>
+        <label>Mes a analizar</label>
         <select id="mes">
           <option value="01">Enero</option><option value="02">Febrero</option>
           <option value="03">Marzo</option><option value="04">Abril</option>
@@ -164,47 +168,99 @@
       <div class="form-group">
         <label>Número de años históricos</label>
         <input type="number" id="nAnios" value="10" min="1" max="30" />
-        <p class="hint">Contados hacia atrás desde el año de referencia</p>
+        <p class="hint">Según lo que indique el contrato (habitualmente 10)</p>
       </div>
       <div class="form-group">
         <label>Año de referencia (fin de serie)</label>
         <input type="number" id="anioFin" value="2024" min="1950" max="2025" />
+        <p class="hint">Normalmente el año anterior al reclamado</p>
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-primary" id="btnConsultar" onclick="consultar()" disabled>Consultar</button>
+      <button class="btn btn-primary" id="btnConsultar" onclick="consultar()" disabled>Calcular referencia histórica</button>
     </div>
     <div id="status" class="status"></div>
     <div class="progress-bar" id="prog"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
   </div>
 
-  <!-- Resultados -->
+  <!-- Resultados histórico -->
   <div id="results" class="results">
     <div class="summary-cards" id="cards"></div>
     <div class="table-header">
       <h3 id="tableTitle"></h3>
       <div style="display:flex;gap:8px;">
-        <button class="btn btn-sm" onclick="exportCSV()">Exportar CSV</button>
-        <button class="btn btn-sm" onclick="copyTable()">Copiar tabla</button>
+        <button class="btn btn-sm" onclick="exportCSVhistorico()">Exportar CSV</button>
+        <button class="btn btn-sm" onclick="copyTable('mainTable')">Copiar tabla</button>
       </div>
     </div>
     <div class="table-wrap"><table id="mainTable"></table></div>
     <p style="font-size:11px;color:#bbb;margin-top:8px;">
-      Precipitación media diaria = precipitación total del mes ÷ días del mes (incluye años bisiestos).
-      Días de lluvia apreciable: días con precipitación ≥ 1 mm.
+      Precipitación media diaria = precipitación total del mes ÷ días del mes. Días de lluvia apreciable: días con precipitación ≥ 1 mm.
+    </p>
+  </div>
+
+  <!-- 4. Análisis FM -->
+  <div class="form-card fm-section" id="cardFM">
+    <h2>4. Análisis de fuerza mayor</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Mes reclamado</label>
+        <select id="fmMes">
+          <option value="01">Enero</option><option value="02">Febrero</option>
+          <option value="03">Marzo</option><option value="04">Abril</option>
+          <option value="05">Mayo</option><option value="06">Junio</option>
+          <option value="07">Julio</option><option value="08">Agosto</option>
+          <option value="09">Septiembre</option><option value="10">Octubre</option>
+          <option value="11">Noviembre</option><option value="12" selected>Diciembre</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Año reclamado</label>
+        <input type="number" id="fmAnio" value="2025" min="1950" max="2030" />
+      </div>
+      <div class="form-group">
+        <label>Margen contractual (%)</label>
+        <input type="number" id="fmMargen" value="10" min="0" max="100" step="1" />
+        <p class="hint">% sobre la media que debe superarse para activar FM</p>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-fm" id="btnFM" onclick="analizarFM()">Analizar fuerza mayor</button>
+    </div>
+    <div id="statusFM" class="status"></div>
+    <div class="progress-bar" id="progFM"><div class="progress-fill" id="progFMFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- Resultados FM -->
+  <div class="fm-section" id="resultsFM">
+
+    <!-- Resumen FM -->
+    <div class="fm-resumen" id="fmResumen"></div>
+
+    <!-- Tabla diaria intensidad -->
+    <div class="table-header">
+      <h3 id="fmTitleIntensidad"></h3>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-sm" onclick="exportCSVfm()">Exportar CSV</button>
+        <button class="btn btn-sm" onclick="copyTable('fmTable')">Copiar tabla</button>
+      </div>
+    </div>
+    <div class="table-wrap"><table id="fmTable"></table></div>
+    <p style="font-size:11px;color:#bbb;margin-top:8px;">
+      Se marcan en rojo los días cuya precipitación supera el umbral de activación (media histórica × (1 + margen/100)).
+      Estos son los días reclamables por intensidad extraordinaria.
     </p>
   </div>
 
   <div class="footer">
     Fuente: <a href="https://opendata.aemet.es" target="_blank">AEMET OpenData</a> ·
-    Endpoint: <code>/api/valores/climatologicos/mensualesanuales</code>
+    Endpoints: climatologicos/mensualesanuales · climatologicos/diarios
   </div>
 </div>
 
 <script>
 const MESES_LABEL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-// Mapa CCAA → array de nombres de provincia tal como los devuelve AEMET
 const PROV_CCAA = {
   'ALBACETE':'Castilla-La Mancha','ALICANTE':'Comunitat Valenciana','ALICANTE/ALACANT':'Comunitat Valenciana',
   'ALMERIA':'Andalucía','ALMERÍA':'Andalucía','ARABA/ÁLAVA':'País Vasco','ARABA':'País Vasco','ÁLAVA':'País Vasco',
@@ -232,9 +288,21 @@ const PROV_CCAA = {
 };
 
 let todasEstaciones = [];
-let estacionSel = null;
-let resultData  = [];
-let keyVisible  = false;
+let estacionSel     = null;
+let resultData      = [];
+let keyVisible      = false;
+let mediaHistPDia   = null;  // media diaria histórica calculada
+let mediaHistDias   = null;  // media días lluvia histórica calculada
+let fmDiarios       = [];    // datos diarios del mes reclamado
+
+window.addEventListener('DOMContentLoaded', function() {
+  const saved = localStorage.getItem('aemet_api_key');
+  if (saved) {
+    document.getElementById('apiKey').value = saved;
+    document.getElementById('btnBorrarKey').style.display = 'inline-block';
+    showStatusEst('API Key cargada. Pulsa "Cargar estaciones" para continuar.', 'info');
+  }
+});
 
 function toggleKey() {
   const inp = document.getElementById('apiKey');
@@ -242,37 +310,38 @@ function toggleKey() {
   inp.type = keyVisible ? 'text' : 'password';
   document.getElementById('btnMostrar').textContent = keyVisible ? 'Ocultar' : 'Mostrar';
 }
-
-function showStatusEst(msg, type) {
-  const el = document.getElementById('statusEst');
-  el.textContent = msg; el.className = 'status ' + type;
+function borrarKey() {
+  localStorage.removeItem('aemet_api_key');
+  document.getElementById('apiKey').value = '';
+  document.getElementById('btnBorrarKey').style.display = 'none';
+  showStatusEst('API Key eliminada.', 'warn');
 }
-function showStatus(msg, type) {
-  const el = document.getElementById('status');
-  el.textContent = msg; el.className = 'status ' + type;
-}
-function setProgress(pct) {
-  document.getElementById('prog').className = 'progress-bar' + (pct > 0 && pct < 100 ? ' on' : '');
-  document.getElementById('progFill').style.width = pct + '%';
+function showStatusEst(msg, type) { const el=document.getElementById('statusEst'); el.textContent=msg; el.className='status '+type; }
+function showStatus(msg, type)    { const el=document.getElementById('status');    el.textContent=msg; el.className='status '+type; }
+function showStatusFM(msg, type)  { const el=document.getElementById('statusFM'); el.textContent=msg; el.className='status '+type; }
+function setProgress(id, fillId, pct) {
+  document.getElementById(id).className = 'progress-bar' + (pct>0&&pct<100?' on':'');
+  document.getElementById(fillId).style.width = pct + '%';
 }
 function parseNum(v) {
-  if (v === undefined || v === null || v === '' || v === 'Ip') return null;
-  const n = parseFloat(String(v).replace(',', '.'));
+  if (v===undefined||v===null||v===''||v==='Ip') return null;
+  const n = parseFloat(String(v).replace(',','.'));
   return isNaN(n) ? null : n;
 }
 function diasDelMes(mes, anio) { return new Date(anio, parseInt(mes), 0).getDate(); }
+function pad2(n) { return String(n).padStart(2,'0'); }
 
-async function aemetGet(apiKey, url, intento) {
+async function aemetGet(apiKey, url, statusFn, intento) {
   intento = intento || 1;
   const full = 'https://opendata.aemet.es/opendata' + url +
-    (url.includes('?') ? '&' : '?') + 'api_key=' + encodeURIComponent(apiKey);
+    (url.includes('?')? '&':'?') + 'api_key=' + encodeURIComponent(apiKey);
   const r1 = await fetch(full);
   if (r1.status === 429) {
     if (intento >= 4) throw new Error('HTTP 429 — límite de peticiones AEMET superado');
     const espera = intento * 3000;
-    showStatus('Límite de peticiones. Esperando ' + (espera/1000) + 's...', 'warn');
+    if (statusFn) statusFn('Límite de peticiones. Esperando ' + (espera/1000) + 's...', 'warn');
     await new Promise(r => setTimeout(r, espera));
-    return aemetGet(apiKey, url, intento + 1);
+    return aemetGet(apiKey, url, statusFn, intento+1);
   }
   if (!r1.ok) throw new Error('HTTP ' + r1.status);
   const j1 = await r1.json();
@@ -285,29 +354,27 @@ async function aemetGet(apiKey, url, intento) {
 function getCCAA(prov) {
   if (!prov) return 'Otras';
   const key = prov.trim().toUpperCase();
-  // Búsqueda exacta
   if (PROV_CCAA[key]) return PROV_CCAA[key];
-  // Búsqueda parcial
-  for (const [k, v] of Object.entries(PROV_CCAA)) {
-    if (key.includes(k) || k.includes(key)) return v;
+  for (const [k,v] of Object.entries(PROV_CCAA)) {
+    if (key.includes(k)||k.includes(key)) return v;
   }
   return 'Otras';
 }
 
 async function cargarEstaciones() {
   const apiKey = document.getElementById('apiKey').value.trim();
-  if (!apiKey) { showStatusEst('Introduce la API Key primero.', 'error'); return; }
-  showStatusEst('Cargando inventario de estaciones AEMET...', 'info');
+  if (!apiKey) { showStatusEst('Introduce la API Key primero.','error'); return; }
+  localStorage.setItem('aemet_api_key', apiKey);
+  document.getElementById('btnBorrarKey').style.display = 'inline-block';
+  showStatusEst('Cargando inventario de estaciones AEMET...','info');
   try {
-    const datos = await aemetGet(apiKey, '/api/valores/climatologicos/inventarioestaciones/todasestaciones/');
-    if (!Array.isArray(datos) || datos.length === 0) throw new Error('Sin datos de estaciones');
+    const datos = await aemetGet(apiKey, '/api/valores/climatologicos/inventarioestaciones/todasestaciones/', showStatusEst);
+    if (!Array.isArray(datos)||datos.length===0) throw new Error('Sin datos de estaciones');
     todasEstaciones = datos;
-    showStatusEst(datos.length + ' estaciones cargadas correctamente.', 'success');
+    showStatusEst(datos.length + ' estaciones cargadas correctamente.','success');
     poblarCCAA();
     document.getElementById('cardFiltros').style.display = 'block';
-  } catch(e) {
-    showStatusEst('Error al cargar estaciones: ' + e.message, 'error');
-  }
+  } catch(e) { showStatusEst('Error al cargar estaciones: ' + e.message,'error'); }
 }
 
 function poblarCCAA() {
@@ -315,11 +382,7 @@ function poblarCCAA() {
   todasEstaciones.forEach(e => ccaaSet.add(getCCAA(e.provincia)));
   const sel = document.getElementById('selCCAA');
   sel.innerHTML = '<option value="">— Selecciona —</option>';
-  [...ccaaSet].sort().forEach(c => {
-    const opt = document.createElement('option');
-    opt.value = c; opt.textContent = c;
-    sel.appendChild(opt);
-  });
+  [...ccaaSet].sort().forEach(c => { const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
 }
 
 function filtrarProvincias() {
@@ -328,227 +391,342 @@ function filtrarProvincias() {
   const selEst  = document.getElementById('selEst');
   selProv.innerHTML = '<option value="">— Selecciona —</option>';
   selEst.innerHTML  = '<option value="">— Selecciona provincia —</option>';
-  selProv.disabled = true; selEst.disabled = true;
-  estacionSel = null;
-  document.getElementById('stationInfo').style.display = 'none';
-  document.getElementById('btnConsultar').disabled = true;
+  selProv.disabled=true; selEst.disabled=true;
+  estacionSel=null; document.getElementById('stationInfo').style.display='none';
+  document.getElementById('btnConsultar').disabled=true;
   if (!ccaa) return;
   const provSet = new Set();
-  todasEstaciones.filter(e => getCCAA(e.provincia) === ccaa).forEach(e => provSet.add((e.provincia || '').trim()));
-  [...provSet].sort().forEach(p => {
-    const opt = document.createElement('option');
-    opt.value = p; opt.textContent = p;
-    selProv.appendChild(opt);
-  });
-  selProv.disabled = false;
+  todasEstaciones.filter(e=>getCCAA(e.provincia)===ccaa).forEach(e=>provSet.add((e.provincia||'').trim()));
+  [...provSet].sort().forEach(p=>{ const o=document.createElement('option'); o.value=p; o.textContent=p; selProv.appendChild(o); });
+  selProv.disabled=false;
 }
 
 function filtrarEstaciones() {
-  const prov   = document.getElementById('selProv').value;
+  const prov = document.getElementById('selProv').value;
   const selEst = document.getElementById('selEst');
-  selEst.innerHTML = '<option value="">— Selecciona —</option>';
-  selEst.disabled  = true;
-  estacionSel = null;
-  document.getElementById('stationInfo').style.display = 'none';
-  document.getElementById('btnConsultar').disabled = true;
+  selEst.innerHTML='<option value="">— Selecciona —</option>';
+  selEst.disabled=true; estacionSel=null;
+  document.getElementById('stationInfo').style.display='none';
+  document.getElementById('btnConsultar').disabled=true;
   if (!prov) return;
-  todasEstaciones
-    .filter(e => (e.provincia || '').trim() === prov)
-    .sort((a, b) => (a.nombre || '').localeCompare(b.nombre || '', 'es'))
-    .forEach(e => {
-      const opt = document.createElement('option');
-      opt.value = e.indicativo;
-      opt.textContent = e.nombre + ' (' + e.indicativo + ')';
-      selEst.appendChild(opt);
-    });
-  selEst.disabled = false;
+  todasEstaciones.filter(e=>(e.provincia||'').trim()===prov)
+    .sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'))
+    .forEach(e=>{ const o=document.createElement('option'); o.value=e.indicativo; o.textContent=e.nombre+' ('+e.indicativo+')'; selEst.appendChild(o); });
+  selEst.disabled=false;
 }
 
 function seleccionarEstacion() {
-  const ind  = document.getElementById('selEst').value;
+  const ind = document.getElementById('selEst').value;
   const info = document.getElementById('stationInfo');
   if (!ind) { info.style.display='none'; estacionSel=null; document.getElementById('btnConsultar').disabled=true; return; }
-  estacionSel = todasEstaciones.find(e => e.indicativo === ind);
+  estacionSel = todasEstaciones.find(e=>e.indicativo===ind);
   if (estacionSel) {
-    info.innerHTML =
-      '<span><strong>Indicativo:</strong> ' + estacionSel.indicativo + '</span>' +
-      '<span><strong>Altitud:</strong> ' + (estacionSel.altitud || '—') + ' m</span>' +
-      '<span><strong>Lat:</strong> ' + (estacionSel.latitud || '—') + '</span>' +
-      '<span><strong>Lon:</strong> ' + (estacionSel.longitud || '—') + '</span>';
-    info.style.display = 'block';
-    document.getElementById('btnConsultar').disabled = false;
+    info.innerHTML = '<span><strong>Indicativo:</strong> '+estacionSel.indicativo+'</span>' +
+      '<span><strong>Altitud:</strong> '+(estacionSel.altitud||'—')+' m</span>' +
+      '<span><strong>Lat:</strong> '+(estacionSel.latitud||'—')+'</span>' +
+      '<span><strong>Lon:</strong> '+(estacionSel.longitud||'—')+'</span>';
+    info.style.display='block';
+    document.getElementById('btnConsultar').disabled=false;
   }
 }
 
+// ── HISTÓRICO ────────────────────────────────────────────────────────────────
 async function consultar() {
-  if (!estacionSel) { showStatus('Selecciona una estación.', 'error'); return; }
+  if (!estacionSel) { showStatus('Selecciona una estación.','error'); return; }
   const apiKey  = document.getElementById('apiKey').value.trim();
   const mes     = document.getElementById('mes').value;
   const nAnios  = parseInt(document.getElementById('nAnios').value);
   const anioFin = parseInt(document.getElementById('anioFin').value);
   const station = estacionSel.indicativo;
-
-  if (nAnios < 1 || nAnios > 30) { showStatus('El número de años debe estar entre 1 y 30.', 'error'); return; }
+  if (nAnios<1||nAnios>30) { showStatus('El número de años debe estar entre 1 y 30.','error'); return; }
 
   const anioIni = anioFin - nAnios + 1;
   resultData = [];
-  document.getElementById('results').style.display = 'none';
-  showStatus('Consultando ' + nAnios + ' año(s) (' + anioIni + '–' + anioFin + '), mes: ' + MESES_LABEL[parseInt(mes)-1] + '...', 'info');
-  setProgress(5);
+  mediaHistPDia = null; mediaHistDias = null;
+  document.getElementById('results').style.display='none';
+  document.getElementById('cardFM').style.display='none';
+  document.getElementById('resultsFM').style.display='none';
+  showStatus('Consultando '+nAnios+' año(s) ('+anioIni+'–'+anioFin+'), mes: '+MESES_LABEL[parseInt(mes)-1]+'...','info');
+  setProgress('prog','progFill',5);
 
-  const años = [];
-  for (let y = anioIni; y <= anioFin; y++) años.push(y);
+  const años=[];
+  for (let y=anioIni;y<=anioFin;y++) años.push(y);
+  let errores=0;
 
-  let errores = 0;
-  for (let i = 0; i < años.length; i++) {
-    const y = años[i];
-    setProgress(Math.round(5 + 90 * (i / años.length)));
-    showStatus('Consultando ' + y + ' (' + (i+1) + ' de ' + años.length + ')...', 'info');
+  for (let i=0;i<años.length;i++) {
+    const y=años[i];
+    setProgress('prog','progFill',Math.round(5+90*(i/años.length)));
+    showStatus('Consultando '+y+' ('+(i+1)+' de '+años.length+')...','info');
     try {
-      const url  = '/api/valores/climatologicos/mensualesanuales/datos/anioini/' + y + '/aniofin/' + y + '/estacion/' + station + '/';
-      const datos = await aemetGet(apiKey, url);
+      const url='/api/valores/climatologicos/mensualesanuales/datos/anioini/'+y+'/aniofin/'+y+'/estacion/'+station+'/';
+      const datos = await aemetGet(apiKey, url, showStatus);
       if (Array.isArray(datos)) {
-        if (i === 0 && datos[0]) console.log('Campos AEMET:', Object.keys(datos[0]).join(', '));
-        const mesInt = parseInt(mes);
-        const fila = datos.find(d => {
-          if (d.fecha) {
-            // AEMET devuelve fecha como "YYYY-M" (sin cero) o "YYYY-MM"
-            const parts = d.fecha.split('-');
-            if (parts.length >= 2) return parseInt(parts[1]) === mesInt;
-          }
-          if (d.mes) return parseInt(d.mes) === mesInt;
+        const mesInt=parseInt(mes);
+        const fila=datos.find(d=>{
+          if (d.fecha){const p=d.fecha.split('-');if(p.length>=2)return parseInt(p[1])===mesInt;}
+          if (d.mes) return parseInt(d.mes)===mesInt;
           return false;
         });
         if (fila) {
-          const nd      = diasDelMes(mes, y);
-          const pTotal  = parseNum(fila.p_mes);
-          const pDia    = pTotal !== null ? pTotal / nd : null;
-          const diasRaw = fila.nw_prec !== undefined ? fila.nw_prec :
-                          fila.n_prec  !== undefined ? fila.n_prec  :
-                          fila.np_001  !== undefined ? fila.np_001  :
-                          fila.nd_prec !== undefined ? fila.nd_prec : null;
-          resultData.push({ año: y, diasMes: nd, pTotal, pDia, dias: parseNum(diasRaw) });
+          const nd=diasDelMes(mes,y);
+          const pTotal=parseNum(fila.p_mes);
+          const pDia=pTotal!==null?pTotal/nd:null;
+          const diasRaw=fila.nw_prec!==undefined?fila.nw_prec:fila.n_prec!==undefined?fila.n_prec:fila.np_001!==undefined?fila.np_001:fila.nd_prec!==undefined?fila.nd_prec:null;
+          resultData.push({año:y,diasMes:nd,pTotal,pDia,dias:parseNum(diasRaw)});
         } else {
-          resultData.push({ año: y, diasMes: diasDelMes(mes, y), pTotal: null, pDia: null, dias: null });
+          resultData.push({año:y,diasMes:diasDelMes(mes,y),pTotal:null,pDia:null,dias:null});
         }
       } else {
-        resultData.push({ año: y, diasMes: diasDelMes(mes, y), pTotal: null, pDia: null, dias: null });
+        resultData.push({año:y,diasMes:diasDelMes(mes,y),pTotal:null,pDia:null,dias:null});
       }
     } catch(e) {
-      resultData.push({ año: y, diasMes: diasDelMes(mes, y), pTotal: null, pDia: null, dias: null });
+      resultData.push({año:y,diasMes:diasDelMes(mes,y),pTotal:null,pDia:null,dias:null});
       errores++;
-      if (errores > Math.max(2, años.length * 0.4)) {
-        showStatus('Demasiados errores. Detalle: ' + e.message, 'error');
-        setProgress(0); return;
-      }
+      if (errores>Math.max(2,años.length*0.4)){showStatus('Demasiados errores: '+e.message,'error');setProgress('prog','progFill',0);return;}
     }
-    await new Promise(r => setTimeout(r, 1500));
+    await new Promise(r=>setTimeout(r,1500));
   }
 
-  setProgress(100);
-  const conDatos = resultData.filter(r => r.pDia !== null || r.dias !== null);
-  if (conDatos.length === 0) { showStatus('No se han obtenido datos para esta estación y período.', 'error'); return; }
-  showStatus('Consulta completada: datos para ' + conDatos.length + ' de ' + años.length + ' año(s).', 'success');
-  renderResults(mes);
+  setProgress('prog','progFill',100);
+  const conDatos=resultData.filter(r=>r.pDia!==null||r.dias!==null);
+  if (conDatos.length===0){showStatus('No se han obtenido datos para esta estación y período.','error');return;}
+  showStatus('Referencia histórica calculada con datos de '+conDatos.length+' año(s).','success');
+  renderHistorico(mes);
+
+  // Sincronizar mes en el formulario FM y mostrar sección FM
+  document.getElementById('fmMes').value = mes;
+  document.getElementById('cardFM').style.display='block';
+  document.getElementById('cardFM').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function renderResults(mes) {
-  const mesLabel = MESES_LABEL[parseInt(mes) - 1];
-  const stName   = estacionSel ? estacionSel.nombre : '—';
-  const stId     = estacionSel ? estacionSel.indicativo : '—';
-  document.getElementById('tableTitle').textContent = mesLabel + ' — Serie histórica · ' + stName + ' (' + stId + ')';
+function renderHistorico(mes) {
+  const mesLabel=MESES_LABEL[parseInt(mes)-1];
+  const stName=estacionSel?estacionSel.nombre:'—';
+  const stId=estacionSel?estacionSel.indicativo:'—';
+  document.getElementById('tableTitle').textContent=mesLabel+' — Serie histórica · '+stName+' ('+stId+')';
 
-  const withP     = resultData.filter(r => r.pDia !== null);
-  const withD     = resultData.filter(r => r.dias !== null);
-  const mediaPDia = withP.length ? withP.reduce((s,r) => s+r.pDia, 0) / withP.length : null;
-  const mediaD    = withD.length ? withD.reduce((s,r) => s+r.dias, 0) / withD.length : null;
-  const maxPDia   = withP.length ? Math.max(...withP.map(r => r.pDia)) : 1;
-  const maxD      = withD.length ? Math.max(...withD.map(r => r.dias)) : 1;
-  const anioMax   = withP.length ? withP.reduce((a,b) => a.pDia>b.pDia?a:b).año : '—';
+  const withP=resultData.filter(r=>r.pDia!==null);
+  const withD=resultData.filter(r=>r.dias!==null);
+  mediaHistPDia=withP.length?withP.reduce((s,r)=>s+r.pDia,0)/withP.length:null;
+  mediaHistDias=withD.length?withD.reduce((s,r)=>s+r.dias,0)/withD.length:null;
+  const maxPDia=withP.length?Math.max(...withP.map(r=>r.pDia)):1;
+  const maxD=withD.length?Math.max(...withD.map(r=>r.dias)):1;
+  const anioMax=withP.length?withP.reduce((a,b)=>a.pDia>b.pDia?a:b).año:'—';
 
-  document.getElementById('cards').innerHTML =
-    '<div class="card"><div class="card-label">Estación</div>' +
-    '<div class="card-sub" style="font-size:15px;font-weight:600;margin-top:2px">' + stName + '</div>' +
-    '<div class="card-sub">' + stId + '</div></div>' +
-    '<div class="card"><div class="card-label">Prec. media diaria · ' + mesLabel + '</div>' +
-    '<div class="card-value">' + (mediaPDia!==null?mediaPDia.toFixed(2):'—') + '<span class="card-unit">mm/día</span></div>' +
-    '<div class="card-sub">Media de la serie</div></div>' +
-    '<div class="card"><div class="card-label">Días lluvia apreciable</div>' +
-    '<div class="card-value">' + (mediaD!==null?mediaD.toFixed(1):'—') + '<span class="card-unit">días</span></div>' +
-    '<div class="card-sub">Media de la serie</div></div>' +
-    '<div class="card"><div class="card-label">Año más lluvioso</div>' +
-    '<div class="card-value" style="font-size:28px">' + anioMax + '</div></div>';
+  document.getElementById('cards').innerHTML=
+    '<div class="card"><div class="card-label">Estación</div><div class="card-sub" style="font-size:15px;font-weight:600;margin-top:2px">'+stName+'</div><div class="card-sub">'+stId+'</div></div>'+
+    '<div class="card"><div class="card-label">Prec. media diaria · '+mesLabel+'</div><div class="card-value">'+(mediaHistPDia!==null?mediaHistPDia.toFixed(2):'—')+'<span class="card-unit">mm/día</span></div><div class="card-sub">Media de la serie</div></div>'+
+    '<div class="card"><div class="card-label">Días lluvia apreciable</div><div class="card-value">'+(mediaHistDias!==null?mediaHistDias.toFixed(1):'—')+'<span class="card-unit">días</span></div><div class="card-sub">Media de la serie</div></div>'+
+    '<div class="card"><div class="card-label">Año más lluvioso</div><div class="card-value" style="font-size:28px">'+anioMax+'</div></div>';
 
-  let html = '<thead><tr>' +
-    '<th class="left" rowspan="2">Año</th>' +
-    '<th rowspan="2">Días del mes</th>' +
-    '<th rowspan="2">Prec. total<span class="col-note">mm</span></th>' +
-    '<th colspan="3">Precipitación media diaria</th>' +
-    '<th colspan="3">Días de lluvia apreciable</th></tr>' +
-    '<tr class="sub-header"><th>mm/día</th><th style="min-width:110px"></th><th>vs. media</th>' +
+  let html='<thead><tr>'+
+    '<th class="left" rowspan="2">Año</th>'+
+    '<th rowspan="2">Días del mes</th>'+
+    '<th rowspan="2">Prec. total<span class="col-note">mm</span></th>'+
+    '<th colspan="3">Precipitación media diaria</th>'+
+    '<th colspan="3">Días de lluvia apreciable</th></tr>'+
+    '<tr class="sub-header"><th>mm/día</th><th style="min-width:110px"></th><th>vs. media</th>'+
     '<th>días</th><th style="min-width:90px"></th><th>vs. media</th></tr></thead><tbody>';
 
-  resultData.forEach(r => {
-    const pBar  = r.pDia!==null ? Math.round((r.pDia/maxPDia)*100) : 0;
-    const dBar  = r.dias!==null ? Math.round((r.dias/maxD)*80)     : 0;
-    const diffP = (r.pDia!==null&&mediaPDia!==null) ? r.pDia-mediaPDia : null;
-    const diffD = (r.dias!==null&&mediaD!==null)    ? r.dias-mediaD    : null;
-    const sP    = diffP!==null?(diffP>=0?'+':''):'';
-    const sD    = diffD!==null?(diffD>=0?'+':''):'';
-    const cP    = diffP!==null?(diffP>=0?'above':'below'):'';
-    const cD    = diffD!==null?(diffD>=0?'above':'below'):'';
-    html += '<tr>' +
-      '<td class="left">' + r.año + '</td>' +
-      '<td>' + r.diasMes + '</td>' +
-      '<td>' + (r.pTotal!==null?r.pTotal.toFixed(1):'<span class="na">s/d</span>') + '</td>' +
-      '<td>' + (r.pDia!==null?r.pDia.toFixed(2):'<span class="na">s/d</span>') + '</td>' +
-      '<td class="bar-cell"><div class="bar-wrap"><div class="bar" style="width:' + pBar + 'px"></div></div></td>' +
-      '<td class="' + cP + '">' + (diffP!==null?sP+diffP.toFixed(2)+' mm/d':'<span class="na">—</span>') + '</td>' +
-      '<td>' + (r.dias!==null?Math.round(r.dias):'<span class="na">s/d</span>') + '</td>' +
-      '<td class="bar-cell"><div class="bar-wrap"><div class="bar bar-dias" style="width:' + dBar + 'px"></div></div></td>' +
-      '<td class="' + cD + '">' + (diffD!==null?sD+diffD.toFixed(1)+' días':'<span class="na">—</span>') + '</td>' +
+  resultData.forEach(r=>{
+    const pBar=r.pDia!==null?Math.round((r.pDia/maxPDia)*100):0;
+    const dBar=r.dias!==null?Math.round((r.dias/maxD)*80):0;
+    const diffP=(r.pDia!==null&&mediaHistPDia!==null)?r.pDia-mediaHistPDia:null;
+    const diffD=(r.dias!==null&&mediaHistDias!==null)?r.dias-mediaHistDias:null;
+    const sP=diffP!==null?(diffP>=0?'+':''):'';
+    const sD=diffD!==null?(diffD>=0?'+':''):'';
+    const cP=diffP!==null?(diffP>=0?'above':'below'):'';
+    const cD=diffD!==null?(diffD>=0?'above':'below'):'';
+    html+='<tr>'+
+      '<td class="left">'+r.año+'</td>'+
+      '<td>'+r.diasMes+'</td>'+
+      '<td>'+(r.pTotal!==null?r.pTotal.toFixed(1):'<span class="na">s/d</span>')+'</td>'+
+      '<td>'+(r.pDia!==null?r.pDia.toFixed(2):'<span class="na">s/d</span>')+'</td>'+
+      '<td class="bar-cell"><div class="bar-wrap"><div class="bar" style="width:'+pBar+'px"></div></div></td>'+
+      '<td class="'+cP+'">'+(diffP!==null?sP+diffP.toFixed(2)+' mm/d':'<span class="na">—</span>')+'</td>'+
+      '<td>'+(r.dias!==null?Math.round(r.dias):'<span class="na">s/d</span>')+'</td>'+
+      '<td class="bar-cell"><div class="bar-wrap"><div class="bar bar-dias" style="width:'+dBar+'px"></div></div></td>'+
+      '<td class="'+cD+'">'+(diffD!==null?sD+diffD.toFixed(1)+' días':'<span class="na">—</span>')+'</td>'+
       '</tr>';
   });
+  html+='<tr class="media-row"><td class="left">Media serie</td><td>—</td><td>—</td>'+
+    '<td>'+(mediaHistPDia!==null?mediaHistPDia.toFixed(2):'—')+'</td><td></td><td></td>'+
+    '<td>'+(mediaHistDias!==null?mediaHistDias.toFixed(1):'—')+'</td><td></td><td></td></tr></tbody>';
 
-  html += '<tr class="media-row"><td class="left">Media serie</td><td>—</td><td>—</td>' +
-    '<td>' + (mediaPDia!==null?mediaPDia.toFixed(2):'—') + '</td><td></td><td></td>' +
-    '<td>' + (mediaD!==null?mediaD.toFixed(1):'—') + '</td><td></td><td></td></tr></tbody>';
-
-  document.getElementById('mainTable').innerHTML = html;
-  document.getElementById('results').style.display = 'block';
-  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('mainTable').innerHTML=html;
+  document.getElementById('results').style.display='block';
 }
 
-function exportCSV() {
-  const mes      = document.getElementById('mes').value;
-  const mesLabel = MESES_LABEL[parseInt(mes)-1];
-  const stId     = estacionSel ? estacionSel.indicativo : '';
-  const stName   = estacionSel ? estacionSel.nombre     : '';
-  let csv = 'Estacion;Indicativo;Mes;Año;Dias_mes;Prec_total_mm;Prec_media_diaria_mm_dia;Dias_lluvia_apreciable\n';
-  resultData.forEach(r => {
-    csv += ['"'+stName+'"',stId,mesLabel,r.año,r.diasMes,
+// ── FUERZA MAYOR ─────────────────────────────────────────────────────────────
+async function analizarFM() {
+  if (mediaHistPDia===null) { showStatusFM('Calcula primero la referencia histórica.','error'); return; }
+  const apiKey  = document.getElementById('apiKey').value.trim();
+  const mes     = document.getElementById('fmMes').value;
+  const anio    = parseInt(document.getElementById('fmAnio').value);
+  const margen  = parseFloat(document.getElementById('fmMargen').value);
+  const station = estacionSel.indicativo;
+
+  const umbralIntensidad = mediaHistPDia * (1 + margen/100);
+  const umbralDias       = mediaHistDias !== null ? mediaHistDias * (1 + margen/100) : null;
+
+  fmDiarios = [];
+  document.getElementById('resultsFM').style.display='none';
+  showStatusFM('Obteniendo datos diarios de '+MESES_LABEL[parseInt(mes)-1]+' '+anio+'...','info');
+  setProgress('progFM','progFMFill',10);
+
+  try {
+    const nd   = diasDelMes(mes, anio);
+    const fi   = anio+'-'+mes+'-01T00:00:00UTC';
+    const ff   = anio+'-'+mes+'-'+pad2(nd)+'T23:59:59UTC';
+    const url  = '/api/valores/climatologicos/diarios/datos/fechaini/'+fi+'/fechafin/'+ff+'/estacion/'+station+'/';
+    const datos = await aemetGet(apiKey, url, showStatusFM);
+    setProgress('progFM','progFMFill',90);
+
+    if (!Array.isArray(datos)||datos.length===0) throw new Error('Sin datos diarios para ese mes y estación');
+
+    // Construir array día a día (puede haber días sin registro)
+    for (let d=1;d<=nd;d++) {
+      const fechaStr = anio+'-'+mes+'-'+pad2(d);
+      const fila = datos.find(r=>r.fecha && r.fecha.startsWith(fechaStr));
+      const prec = fila ? parseNum(fila.prec) : null;
+      fmDiarios.push({ dia:d, fecha:fechaStr, prec, activa: prec!==null && prec>umbralIntensidad });
+    }
+    setProgress('progFM','progFMFill',100);
+    showStatusFM('Análisis completado.','success');
+    renderFM(mes, anio, margen, umbralIntensidad, umbralDias);
+
+  } catch(e) {
+    showStatusFM('Error al obtener datos diarios: '+e.message,'error');
+    setProgress('progFM','progFMFill',0);
+  }
+}
+
+function renderFM(mes, anio, margen, umbralIntensidad, umbralDias) {
+  const mesLabel  = MESES_LABEL[parseInt(mes)-1];
+  const stName    = estacionSel.nombre;
+  const nd        = diasDelMes(mes, anio);
+  const conDato   = fmDiarios.filter(d=>d.prec!==null);
+  const diasActiva = fmDiarios.filter(d=>d.activa).length;
+  const diasLluvia = fmDiarios.filter(d=>d.prec!==null&&d.prec>=1).length;
+  const precTotal  = fmDiarios.reduce((s,d)=>s+(d.prec||0),0);
+  const precMedia  = conDato.length ? precTotal/nd : null;
+
+  // Frecuencia: ¿días de lluvia apreciable superan umbral?
+  const frecActiva = umbralDias!==null && diasLluvia>umbralDias;
+
+  // Resumen FM
+  document.getElementById('fmResumen').innerHTML =
+    // Bloque intensidad
+    '<div class="fm-bloque">'+
+    '<h4>Intensidad</h4>'+
+    '<div class="fm-stat"><span class="fm-stat-label">Media histórica diaria ('+mesLabel+')</span><span class="fm-stat-value">'+(mediaHistPDia!==null?mediaHistPDia.toFixed(2):'—')+' mm/día</span></div>'+
+    '<div class="fm-stat"><span class="fm-stat-label">Margen contractual</span><span class="fm-stat-value">'+margen+'%</span></div>'+
+    '<div class="fm-stat"><span class="fm-stat-label">Umbral de activación</span><span class="fm-stat-value">'+umbralIntensidad.toFixed(2)+' mm/día</span></div>'+
+    '<div class="fm-stat"><span class="fm-stat-label">Precipitación media diaria '+anio+'</span><span class="fm-stat-value">'+(precMedia!==null?precMedia.toFixed(2):'—')+' mm/día</span></div>'+
+    '<div class="fm-stat"><span class="fm-stat-label">Días que superan el umbral</span><span class="fm-stat-value" style="color:'+(diasActiva>0?'#c81e1e':'#1a1a1a')+'">'+diasActiva+' día(s)</span></div>'+
+    '<div class="fm-badge '+(diasActiva>0?'activa':'no-activa')+'">'+(diasActiva>0?'FM ACTIVA — '+diasActiva+' día(s) reclamables':'No activa')+'</div>'+
+    '</div>'+
+    // Bloque frecuencia
+    '<div class="fm-bloque">'+
+    '<h4>Frecuencia</h4>'+
+    '<div class="fm-stat"><span class="fm-stat-label">Media histórica días lluvia ('+mesLabel+')</span><span class="fm-stat-value">'+(mediaHistDias!==null?mediaHistDias.toFixed(1):'—')+' días</span></div>'+
+    '<div class="fm-stat"><span class="fm-stat-label">Margen contractual</span><span class="fm-stat-value">'+margen+'%</span></div>'+
+    '<div class="fm-stat"><span class="fm-stat-label">Umbral de activación</span><span class="fm-stat-value">'+(umbralDias!==null?umbralDias.toFixed(1):'—')+' días</span></div>'+
+    '<div class="fm-stat"><span class="fm-stat-label">Días lluvia apreciable '+anio+'</span><span class="fm-stat-value">'+diasLluvia+' días</span></div>'+
+    '<div class="fm-stat"><span class="fm-stat-label">Superación del umbral</span><span class="fm-stat-value">'+(frecActiva?'Sí':'No')+'</span></div>'+
+    '<div class="fm-badge '+(frecActiva?'activa-frec':'no-activa')+'">'+(frecActiva?'FM ACTIVA por frecuencia':'No activa')+'</div>'+
+    '</div>';
+
+  // Título tabla
+  document.getElementById('fmTitleIntensidad').textContent = 'Registro diario · '+mesLabel+' '+anio+' · '+stName;
+
+  // Tabla diaria
+  const maxPrec = Math.max(...fmDiarios.filter(d=>d.prec!==null).map(d=>d.prec), umbralIntensidad, 0.1);
+  let html = '<thead><tr>'+
+    '<th class="left">Día</th>'+
+    '<th>Precipitación<span class="col-note">mm</span></th>'+
+    '<th style="min-width:130px"></th>'+
+    '<th>Umbral FM<span class="col-note">mm/día</span></th>'+
+    '<th>Diferencia<span class="col-note">vs. umbral</span></th>'+
+    '<th>¿Activa FM?</th>'+
+    '</tr></thead><tbody>';
+
+  fmDiarios.forEach(d=>{
+    const bar   = d.prec!==null ? Math.round((d.prec/maxPrec)*120) : 0;
+    const umbBar= Math.round((umbralIntensidad/maxPrec)*120);
+    const diff  = d.prec!==null ? d.prec-umbralIntensidad : null;
+    const rowCls= d.activa ? 'fm-activa' : 'fm-no';
+    html+='<tr class="'+rowCls+'">'+
+      '<td class="left">'+pad2(d.dia)+'/'+pad2(parseInt(mes))+'/'+anio+'</td>'+
+      '<td>'+(d.prec!==null?d.prec.toFixed(1):'<span class="na">s/d</span>')+'</td>'+
+      '<td class="bar-cell"><div class="bar-wrap" style="position:relative">'+
+        '<div style="position:absolute;left:'+umbBar+'px;top:0;height:100%;width:2px;background:#c81e1e;opacity:0.4"></div>'+
+        '<div class="bar" style="width:'+bar+'px;background:'+(d.activa?'#c81e1e':'#1D9E75')+'"></div>'+
+      '</div></td>'+
+      '<td>'+umbralIntensidad.toFixed(2)+'</td>'+
+      '<td class="'+(diff!==null?(diff>0?'above below':'below'):'')+'">'+(diff!==null?(diff>=0?'+':'')+diff.toFixed(2)+' mm':'<span class="na">—</span>')+'</td>'+
+      '<td class="fm-mark">'+(d.activa?'SÍ':'—')+'</td>'+
+      '</tr>';
+  });
+  html+='</tbody>';
+  document.getElementById('fmTable').innerHTML=html;
+  document.getElementById('resultsFM').style.display='block';
+  document.getElementById('resultsFM').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── EXPORTACIÓN ───────────────────────────────────────────────────────────────
+function exportCSVhistorico() {
+  const mes=document.getElementById('mes').value;
+  const mesLabel=MESES_LABEL[parseInt(mes)-1];
+  const stId=estacionSel?estacionSel.indicativo:'';
+  const stName=estacionSel?estacionSel.nombre:'';
+  let csv='Estacion;Indicativo;Mes;Año;Dias_mes;Prec_total_mm;Prec_media_diaria_mm_dia;Dias_lluvia_apreciable\n';
+  resultData.forEach(r=>{
+    csv+=['"'+stName+'"',stId,mesLabel,r.año,r.diasMes,
       r.pTotal!==null?r.pTotal.toFixed(1):'',
       r.pDia!==null?r.pDia.toFixed(2):'',
       r.dias!==null?Math.round(r.dias):''
-    ].join(';') + '\n';
+    ].join(';')+'\n';
   });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
-  a.download = 'aemet_' + stId + '_' + mesLabel + '.csv';
-  a.click();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
+  a.download='aemet_historico_'+stId+'_'+mesLabel+'.csv'; a.click();
 }
 
-function copyTable() {
-  const table = document.getElementById('mainTable');
-  let text = '';
-  table.querySelectorAll('tr').forEach(tr => {
-    text += Array.from(tr.querySelectorAll('th,td'))
-      .filter((_,i) => i!==4 && i!==7)
-      .map(c => c.innerText.trim()).join('\t') + '\n';
+function exportCSVfm() {
+  const mes=document.getElementById('fmMes').value;
+  const anio=document.getElementById('fmAnio').value;
+  const margen=document.getElementById('fmMargen').value;
+  const mesLabel=MESES_LABEL[parseInt(mes)-1];
+  const stId=estacionSel?estacionSel.indicativo:'';
+  const stName=estacionSel?estacionSel.nombre:'';
+  const umbral=(mediaHistPDia*(1+parseFloat(margen)/100)).toFixed(2);
+  let csv='Estacion;Indicativo;Fecha;Prec_mm;Umbral_mm;Activa_FM\n';
+  fmDiarios.forEach(d=>{
+    csv+=['"'+stName+'"',stId,d.fecha,
+      d.prec!==null?d.prec.toFixed(1):'',
+      umbral,
+      d.activa?'SI':'NO'
+    ].join(';')+'\n';
+  });
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
+  a.download='aemet_fm_'+stId+'_'+mesLabel+'_'+anio+'.csv'; a.click();
+}
+
+function copyTable(id) {
+  const table=document.getElementById(id);
+  let text='';
+  table.querySelectorAll('tr').forEach(tr=>{
+    text+=Array.from(tr.querySelectorAll('th,td')).map(c=>c.innerText.trim()).join('\t')+'\n';
   });
   navigator.clipboard.writeText(text)
-    .then(() => { showStatus('Tabla copiada al portapapeles.','success'); setTimeout(()=>{document.getElementById('status').className='status';},2500); })
-    .catch(() => showStatus('No se pudo copiar. Selecciona la tabla manualmente.','error'));
+    .then(()=>{
+      const fn = id==='mainTable'?showStatus:showStatusFM;
+      fn('Tabla copiada al portapapeles.','success');
+      setTimeout(()=>{ document.getElementById(id==='mainTable'?'status':'statusFM').className='status'; },2500);
+    })
+    .catch(()=>{ (id==='mainTable'?showStatus:showStatusFM)('No se pudo copiar.','error'); });
 }
 </script>
 </body>
