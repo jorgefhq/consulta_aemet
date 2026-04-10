@@ -30,12 +30,13 @@
 
     /* Criterio radio */
     .radio-group { display: flex; gap: 12px; margin-top: 4px; }
-    .radio-opt { display: flex; align-items: flex-start; gap: 8px; padding: 10px 14px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; flex: 1; transition: border-color 0.15s, background 0.15s; }
+    .radio-opt { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; flex: 1; transition: border-color 0.15s, background 0.15s; min-width: 0; }
     .radio-opt:hover { border-color: #999; }
     .radio-opt.selected { border-color: #1a1a1a; background: #fafaf8; }
-    .radio-opt input[type=radio] { margin-top: 2px; flex-shrink: 0; }
-    .radio-label { font-size: 13px; font-weight: 500; }
-    .radio-desc { font-size: 11px; color: #888; margin-top: 2px; }
+    .radio-opt input[type=radio] { margin-top: 3px; flex-shrink: 0; width: 16px; height: 16px; accent-color: #1a1a1a; }
+    .radio-text { flex: 1; min-width: 0; }
+    .radio-label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 3px; }
+    .radio-desc { font-size: 11px; color: #888; line-height: 1.4; display: block; }
 
     /* Botones */
     .btn { height: 38px; padding: 0 20px; border: 1px solid #ccc; border-radius: 6px; background: #fff; color: #1a1a1a; font-size: 14px; font-family: inherit; cursor: pointer; white-space: nowrap; transition: background 0.12s; }
@@ -218,17 +219,17 @@
       <div class="radio-group">
         <label class="radio-opt selected" id="opt-media" onclick="selCriterio('media')">
           <input type="radio" name="criterio" value="media" checked />
-          <div>
-            <div class="radio-label">Media diaria del mes</div>
-            <div class="radio-desc">Precipitación total ÷ días del mes. Interpretación favorable al contratista — más fácil de superar.</div>
-          </div>
+          <span class="radio-text">
+            <span class="radio-label">Media diaria del mes</span>
+            <span class="radio-desc">Precipitación total ÷ días del mes. Interpretación favorable al contratista — más fácil de superar.</span>
+          </span>
         </label>
         <label class="radio-opt" id="opt-maxima" onclick="selCriterio('maxima')">
           <input type="radio" name="criterio" value="maxima" />
-          <div>
-            <div class="radio-label">Media de máximos diarios</div>
-            <div class="radio-desc">Media del día más lluvioso de cada año en el mes. Interpretación restrictiva — más difícil de superar.</div>
-          </div>
+          <span class="radio-text">
+            <span class="radio-label">Media de máximos diarios</span>
+            <span class="radio-desc">Media del día más lluvioso de cada año en el mes. Interpretación restrictiva — más difícil de superar.</span>
+          </span>
         </label>
       </div>
     </div>
@@ -643,7 +644,8 @@ function renderTodo(mes, mesLabel, fmAnio, margen) {
   const diasLluvia = fmDiarios.filter(d=>d.prec!==null&&d.prec>=1).length;
   const umbralDias = mediaDias!==null ? mediaDias*(1+margen/100) : null;
   const frecActiva = umbralDias!==null && diasLluvia>umbralDias;
-  const diasFrecuencia = frecActiva ? diasLluvia : 0;
+  // Días reclamables por frecuencia = días de lluvia apreciable − umbral (solo el exceso)
+  const diasFrecuencia = frecActiva ? Math.round(diasLluvia - umbralDias) : 0;
   const diasReclamables = Math.max(diasActiva, diasFrecuencia);
   const criterioGanador = diasActiva>=diasFrecuencia ? 'intensidad' : 'frecuencia';
   const hayFM = diasReclamables>0;
@@ -668,13 +670,13 @@ function renderTodo(mes, mesLabel, fmAnio, margen) {
     '<div class="fm-stat"><span class="fm-stat-label">Umbral de activación FM</span><span class="fm-stat-value">'+(umbralDias!==null?umbralDias.toFixed(1):'—')+' días</span></div>'+
     '<div class="fm-stat"><span class="fm-stat-label">Días lluvia apreciable '+fmAnio+'</span><span class="fm-stat-value">'+diasLluvia+' días</span></div>'+
     '<div class="fm-stat"><span class="fm-stat-label">Superación del umbral</span><span class="fm-stat-value">'+(frecActiva?'Sí':'No')+'</span></div>'+
-    '<div class="fm-badge '+(frecActiva?'badge-frec':'badge-noactiva')+'">'+(frecActiva?'FM ACTIVA — '+diasLluvia+' días lluviosos':'No activa')+'</div>'+
+    '<div class="fm-badge '+(frecActiva?'badge-frec':'badge-noactiva')+'">'+(frecActiva?'FM ACTIVA — '+diasFrecuencia+' día(s) reclamables (exceso sobre umbral)':'No activa')+'</div>'+
     '</div>'+
     // Recuento final
     '<div class="fm-bloque full'+(hayFM?' activo':'')+'">'+
     '<h4>Recuento final de días reclamables</h4>'+
     '<div class="fm-stat"><span class="fm-stat-label">Días reclamables por intensidad</span><span class="fm-stat-value">'+diasActiva+' día(s)</span></div>'+
-    '<div class="fm-stat"><span class="fm-stat-label">Días reclamables por frecuencia</span><span class="fm-stat-value">'+(frecActiva?diasLluvia+' día(s) (mes completo)':'0 — criterio no activo')+'</span></div>'+
+    '<div class="fm-stat"><span class="fm-stat-label">Días reclamables por frecuencia</span><span class="fm-stat-value">'+(frecActiva?diasFrecuencia+' día(s) ('+diasLluvia+' días lluvia − umbral '+umbralDias.toFixed(1)+')':'0 — criterio no activo')+'</span></div>'+
     '<div class="fm-stat"><span class="fm-stat-label">Criterio aplicado (el más favorable)</span><span class="fm-stat-value">'+(hayFM?criterioGanador.charAt(0).toUpperCase()+criterioGanador.slice(1):'Ninguno')+'</span></div>'+
     '<div class="fm-badge badge-total '+(hayFM?'badge-activa':'badge-noactiva')+'">'+(hayFM?'TOTAL DÍAS RECLAMABLES: '+diasReclamables+' día(s) por '+criterioGanador:'Sin activación de FM en este período')+'</div>'+
     '</div>';
